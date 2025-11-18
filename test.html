@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Health Check</title>
+</head>
+<body>
+    <h1>API Health Check Test</h1>
+    <div id="status">Checking...</div>
+    <div id="details"></div>
+
+    <script>
+        const API_URL = 'http://localhost:8003';
+
+        async function testHealth() {
+            const statusDiv = document.getElementById('status');
+            const detailsDiv = document.getElementById('details');
+
+            try {
+                console.log('Fetching:', `${API_URL}/health`);
+                const response = await fetch(`${API_URL}/health`);
+                console.log('Response status:', response.status);
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                statusDiv.innerHTML = '<span style="color: green;">✅ API is healthy</span>';
+                detailsDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                console.error('Error:', error);
+                statusDiv.innerHTML = '<span style="color: red;">❌ Error connecting to API</span>';
+                detailsDiv.innerHTML = `<pre>${error.message}</pre>`;
+            }
+        }
+
+        // Run test on load
+        window.addEventListener('DOMContentLoaded', testHealth);
+    </script>
+</body>
+</html>
